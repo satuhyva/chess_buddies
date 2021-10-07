@@ -30,11 +30,7 @@ class ManageMyProposalsScreenState extends State {
         title: const Text('CHESS BUDDIES'),
       ),
       drawer: const CustomDrawer(),
-      body: Column(
-        children: [
-          MyProposals(),
-        ],
-      ),
+      body: MyProposals(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => startCreatingNewProposal(context),
