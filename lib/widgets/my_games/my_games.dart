@@ -1,3 +1,4 @@
+import 'package:chess_buddies/models/game.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,9 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../common/general_title.dart';
 import '../loading_spinner/loading_spinner.dart';
-// import '../../models/play_route_arguments.dart';
 import '../../providers/game_provider.dart';
-import '../../models/game.dart';
+import '../../services/firebase/database_service.dart';
 
 class MyGames extends StatefulWidget {
   @override
@@ -16,6 +16,7 @@ class MyGames extends StatefulWidget {
 
 class _MyGamesState extends State<MyGames> {
   var myName;
+  final databaseService = DatabaseService();
 
   @override
   void initState() {
@@ -32,33 +33,17 @@ class _MyGamesState extends State<MyGames> {
     }
   }
 
-  Future<void> continuePlaying(document, setGameParameters) async {
-    final game = Game(
-      id: document.id,
-      black: document['black'],
-      blackLevel: document['blackLevel'],
-      white: document['white'],
-      whiteLevel: document['whiteLevel'],
-      createdAt: document['createdAt'],
-      situation: document['situation'],
-      history: document['history'],
-      players: document['players'],
-      next: document['next'],
-    );
-    setGameParameters(game, myName);
-
+  Future<void> continuePlaying(Game game, setGameParameters) async {
+    setGameParameters(game);
     Navigator.of(context).pushReplacementNamed(
       '/play',
-      // arguments: PlayRouteArguments(documentId, myName)
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final gameProvider = Provider.of<GameProvider>(context);
-    // Haetaan vain kerran tässä omat pelit, ettei tule joka tilannepäivityksestä uutta buildiä...
-    CollectionReference myCurrentGamesReference =
-        FirebaseFirestore.instance.collection('games');
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -67,7 +52,7 @@ class _MyGamesState extends State<MyGames> {
         ),
         Expanded(
           child: FutureBuilder(
-              future: myCurrentGamesReference.get(),
+              future: databaseService.myGames(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
@@ -84,15 +69,14 @@ class _MyGamesState extends State<MyGames> {
                   itemCount: gamesDocuments.length,
                   itemBuilder: (ctx, index) {
                     final document = gamesDocuments[index];
-                    final dotColor = document['white'] == myName
-                        ? Colors.white
-                        : Colors.black;
-                    final opponent = document['white'] == myName
-                        ? document['black']
-                        : document['white'];
-                    final opponentLevel = document['white'] == myName
-                        ? document['blackLevel']
-                        : document['whiteLevel'];
+                    final game = Game.fromFirestore(document, myName);
+                    final dotColor =
+                        game.white == myName ? Colors.white : Colors.black;
+                    final opponent =
+                        game.white == myName ? game.black : game.white;
+                    final opponentLevel = game.white == myName
+                        ? game.blackLevel
+                        : game.whiteLevel;
                     // TODO: inform user when it is his turn next!!!
                     // final nextTurnIsMine =
                     //     document['next'] == myName ? true : false;
@@ -113,13 +97,13 @@ class _MyGamesState extends State<MyGames> {
                                 fontWeight: FontWeight.bold, fontSize: 13)),
                         subtitle: Padding(
                             padding: const EdgeInsets.only(top: 5),
-                            child: Text('Started: ${document['createdAt']}',
+                            child: Text('Started: ${game.createdAt}',
                                 style: const TextStyle(
                                     fontStyle: FontStyle.italic))),
                         // TODO: add a button to delete game!
                         trailing: IconButton(
                             onPressed: () => continuePlaying(
-                                document, gameProvider.setGameParameters),
+                                game, gameProvider.setGameParameters),
                             icon: const Icon(
                               Icons.sports_esports,
                               size: 30,

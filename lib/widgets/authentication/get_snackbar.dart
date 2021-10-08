@@ -5,7 +5,9 @@ SnackBar getSnackbar(BuildContext context, String errorType) {
       ? '\nERROR:\n\nThe name you selected is already in use.\nPlease select another name!'
       : errorType == 'emailExists'
           ? '\nERROR:\n\nThe email you selected is already in use.\nPlease select another email!'
-          : '\nERROR:\n\nSome error occurred.\nPlease check your credentials!';
+          : errorType == 'SaveGameSituationFailed'
+              ? '\nERROR:\n\nCould not save your move.\nPlease try again!'
+              : '\nERROR:\n\nSome error occurred.\nPlease check your credentials!';
 
   return SnackBar(
     content: Container(

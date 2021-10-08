@@ -23,8 +23,8 @@ final BOTTOM_ROW_NAMES = [
   'rook',
   'knight',
   'bishop',
-  'king',
   'queen',
+  'king',
   'bishop',
   'knight',
   'rook'
@@ -46,7 +46,11 @@ getFreshGame() {
   final colors = ['black', 'black', '', '', '', '', 'white', 'white'];
   for (var i = 0; i < 8; i++) {
     if (i > 1 && i < 6) {
-      positions.add(EMPTY_ROW);
+      var nextRow = [];
+      for (var j = 0; j < 8; j++) {
+        nextRow.add('');
+      }
+      positions.add(nextRow);
     } else {
       final currentNames = rowNames[i];
       final color = colors[i];
