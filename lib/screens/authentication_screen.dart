@@ -31,6 +31,7 @@ class AuthenticationScreenState extends State {
   @override
   void initState() {
     super.initState();
+
     tryToInitialiseWithOldCredentials(
         hideAuthenticationForm, context, hideLoadingSpinner);
   }

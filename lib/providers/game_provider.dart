@@ -65,8 +65,6 @@ class GameProvider with ChangeNotifier {
     final updatedSituation = convertToDictionary([..._gameSituation]);
     final updatedHistory = convertToDictionary([..._gameHistory]);
     final updatedNext = _iAmWhite ? 'black' : 'white';
-    print(updatedHistory);
-    print(updatedSituation);
     notifyListeners();
 
     await saveChangedGameSituationSucceeded(

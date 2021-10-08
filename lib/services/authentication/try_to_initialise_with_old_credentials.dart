@@ -21,5 +21,7 @@ Future<void> tryToInitialiseWithOldCredentials(Function hideAuthenticationForm,
     } catch (error) {
       hideLoadingSpinner();
     }
+  } else {
+    hideLoadingSpinner();
   }
 }

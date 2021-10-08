@@ -6,10 +6,10 @@ class Proposal {
   final bool beginner;
   final bool champion;
   final bool intermediate;
-  final bool createdAt;
-  final bool proposedBy;
-  final bool proposerLevel;
-  final bool proposerColor;
+  final String createdAt;
+  final String proposedBy;
+  final String proposerLevel;
+  final String proposerColor;
   Proposal({
     required this.id,
     required this.advanced,

@@ -86,6 +86,7 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
 
   @override
   Widget build(BuildContext context) {
+    print('AuthenticationForm');
     return Column(children: [
       Card(
           margin:

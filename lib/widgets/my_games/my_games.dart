@@ -105,7 +105,7 @@ class _MyGamesState extends State<MyGames> {
                             onPressed: () => continuePlaying(
                                 game, gameProvider.setGameParameters),
                             icon: const Icon(
-                              Icons.sports_esports,
+                              Icons.exit_to_app,
                               size: 30,
                             )),
                       ),

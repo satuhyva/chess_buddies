@@ -26,23 +26,23 @@ class CustomDrawer extends StatelessWidget {
           route: '/settings',
         ),
         const DrawerListTile(
-          title: 'MANAGE MY PROPOSALS',
-          iconData: Icons.apps,
+          title: 'MY PROPOSALS',
+          iconData: Icons.playlist_add,
           route: '/manage_my_proposals',
         ),
         const DrawerListTile(
           title: 'BROWSE PROPOSALS',
-          iconData: Icons.sports_esports,
+          iconData: Icons.shopping_cart,
           route: '/browse_proposals',
         ),
         const DrawerListTile(
           title: 'MY GAMES',
-          iconData: Icons.sports_esports,
+          iconData: Icons.apps,
           route: '/my_games',
         ),
         const DrawerListTile(
           title: 'PLAY',
-          iconData: Icons.sports_esports,
+          iconData: Icons.play_arrow,
           route: '/play',
         )
       ]),
