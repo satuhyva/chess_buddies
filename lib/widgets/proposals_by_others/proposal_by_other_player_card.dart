@@ -18,7 +18,7 @@ class ProposalByOtherPlayerCard extends StatelessWidget {
         minVerticalPadding: 10,
         leading: Icon(
           Icons.circle,
-          size: 30,
+          size: 35,
           color: dotColor,
         ),
         title: RichText(
@@ -34,10 +34,6 @@ class ProposalByOtherPlayerCard extends StatelessWidget {
             ],
           ),
         ),
-        // Text(
-        //     '${proposal.proposedBy.toString().toUpperCase()}\n${proposal.proposerLevel.toString().toUpperCase()}',
-        //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-
         subtitle: Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Text(proposal.createdAt,
@@ -47,7 +43,7 @@ class ProposalByOtherPlayerCard extends StatelessWidget {
                 proposal.proposedBy, proposal.proposerLevel),
             icon: const Icon(
               Icons.shopping_cart,
-              size: 30,
+              size: 35,
               color: Colors.black,
             )),
       ),

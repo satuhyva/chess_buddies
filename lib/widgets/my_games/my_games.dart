@@ -1,4 +1,5 @@
 import 'package:chess_buddies/models/game.dart';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ import '../common/general_title.dart';
 import '../loading_spinner/loading_spinner.dart';
 import '../../providers/game_provider.dart';
 import '../../services/firebase/database_service.dart';
+import './my_game_card.dart';
 
 class MyGames extends StatefulWidget {
   @override
@@ -33,23 +35,25 @@ class _MyGamesState extends State<MyGames> {
     }
   }
 
-  Future<void> continuePlaying(Game game, setGameParameters) async {
-    setGameParameters(game);
-    Navigator.of(context).pushReplacementNamed(
-      '/play',
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final gameProvider = Provider.of<GameProvider>(context);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GeneralTitle(
           title_text: 'MY GAMES',
         ),
+        Text('Below is a list or your ongoing games.',
+            style: TextStyle(color: Theme.of(context).primaryColor)),
+        Text('Dot color shows the color you play.',
+            style: TextStyle(color: Theme.of(context).primaryColor)),
+        Text('It blinks if it is your turn now.',
+            style: TextStyle(color: Theme.of(context).primaryColor)),
+        Text('Shown are also the name and the skill level of',
+            style: TextStyle(color: Theme.of(context).primaryColor)),
+        Text('the opponent and the date the game was started.',
+            style: TextStyle(color: Theme.of(context).primaryColor)),
         Expanded(
           child: FutureBuilder(
               future: databaseService.myGames(),
@@ -65,52 +69,22 @@ class _MyGamesState extends State<MyGames> {
                 }
 
                 final gamesDocuments = snapshot.data!.docs;
-                return ListView.builder(
-                  itemCount: gamesDocuments.length,
-                  itemBuilder: (ctx, index) {
-                    final document = gamesDocuments[index];
-                    final game = Game.fromFirestore(document, myName);
-                    final dotColor =
-                        game.white == myName ? Colors.white : Colors.black;
-                    final opponent =
-                        game.white == myName ? game.black : game.white;
-                    final opponentLevel = game.white == myName
-                        ? game.blackLevel
-                        : game.whiteLevel;
-                    // TODO: inform user when it is his turn next!!!
-                    // final nextTurnIsMine =
-                    //     document['next'] == myName ? true : false;
-                    return Card(
-                      elevation: 6,
-                      color: Theme.of(context).primaryColorLight,
-                      // Return something other than listtile where there can be more data and buttons!!!
-                      child: ListTile(
-                        minVerticalPadding: 10,
-                        leading: Icon(
-                          Icons.circle,
-                          size: 30,
-                          color: dotColor,
-                        ),
-                        title: Text(
-                            'OPPONENT: ${opponent.toString().toUpperCase()}\nLEVEL: ${opponentLevel.toString().toUpperCase()}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 13)),
-                        subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Text('Started: ${game.createdAt}',
-                                style: const TextStyle(
-                                    fontStyle: FontStyle.italic))),
-                        // TODO: add a button to delete game!
-                        trailing: IconButton(
-                            onPressed: () => continuePlaying(
-                                game, gameProvider.setGameParameters),
-                            icon: const Icon(
-                              Icons.exit_to_app,
-                              size: 30,
-                            )),
-                      ),
-                    );
-                  },
+                return Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: ListView.builder(
+                    itemCount: gamesDocuments.length,
+                    itemBuilder: (ctx, index) {
+                      final document = gamesDocuments[index];
+                      final game = Game.fromFirestore(document, myName);
+                      // TODO: inform user when it is his turn next!!!
+                      // final nextTurnIsMine =
+                      //     document['next'] == myName ? true : false;
+                      return MyGameCard(
+                          game: game,
+                          myName: myName,
+                          setGameParameters: gameProvider.setGameParameters);
+                    },
+                  ),
                 );
               }),
         ),
